@@ -1,27 +1,39 @@
+import { lazy, Suspense } from "react";
 import {
-    Switch,
-    Route,
-    Link
-  } from "react-router-dom";
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 import Cart from "./Cart";
-import Products from './Products'
+import Loader from './Loader';
+import Product from "./Product";
+import './navbar.css'
+
+//import Products from './Products'
+const Products = lazy(() => import("./Products"))
 
 const Navbar = () => {
-    return (
-        <>
-        <Link to = '/' >HOME </Link>
-        <Link to = '/cart' > CART </Link>
+  return (
+    <>
 
-        <Switch>
-          <Route exact path="/">
+      <div className="navbar">
+        <Link to='/' className="home">HOME </Link>
+        <Link to='/cart' className="cart"> CART </Link>
+      </div>
+
+      <Switch>
+        <Route exact path="/">
+          <Suspense fallback={<Loader />}>
             <Products />
-          </Route>
-          <Route exact path="/cart">
-            <Cart />
-          </Route>
-        </Switch>
-        </>
-    )
+          </Suspense>
+          {/* <Products /> */}
+        </Route>
+        <Route exact path="/cart">
+          <Cart />
+        </Route>
+      </Switch>
+    </>
+  )
 }
 
 export default Navbar
